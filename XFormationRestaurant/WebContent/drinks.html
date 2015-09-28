@@ -1,0 +1,63 @@
+<div id="drinks">
+
+	<script type="text/javascript">
+	
+		var maxDrinks = 3;
+		
+		//Add a drink to the current enquiry box and proceed to the next screen
+		var sendDrinkToEnquiry = function (oid, name, price) {
+			//Control the max number of items you can add
+			var drinks = $("#enquiryline .drinkinline").length + 1;
+			if(drinks > maxDrinks) {
+				alert("The policy is 3 drinks per menu. Please click again on the DRINKS menu if you want to make a change in your order");
+			} else {
+			    $('div#enquiryline').append("<div id='drink"+oid+"' class='drinkinline'>"+name+"<span>"+price+"</span></div>").fadeIn(2500);
+			}
+		    addToTotalprice(price);
+		};
+		
+		$(document).ready(function() {
+			
+			//Fill div with drinks
+			$.getJSON("http://localhost:8080/XFormationRestaurant/rest/drinks")
+				 .done(function(data) {
+					 	 //Distribute items along the 3 columns
+						 var column=1;
+						 $.each(data, function(index, value) {
+							 $('.column-'+column).append("<div id='drink"+data[index].oid+"' class='drink'>"+data[index].name+"&nbsp"+data[index].price+"zl</div>").fadeIn('slow');
+							 $('div#drink'+data[index].oid).click(function () {
+								 sendDrinkToEnquiry(data[index].oid, data[index].name, data[index].price);
+							 });
+							 if(column%3==0) column=0;
+							 column++;
+					     });
+		  		 })
+		  		 .fail(function(jqxhr, textStatus, error) {
+		    		//OUTLAW: some white lie to not worry customers
+		    		var whitelie = "Oops - kitchen is temporary closed, sorry!";
+		    		$('div.cuisinebox').append("<div id='whilelie'>"+whitelie+"</div>").fadeIn('slow');					
+		    	 	var err = textStatus + ", " + error;
+		    	 	console.log( "JSON Request Failed for DIV.mealsbox: " + err );
+			});
+			$('.mealsbox').fadeIn(2500);
+			
+		});
+		
+	</script>
+
+	<h2><span>SELECT A DRINK</span></h2>
+	<div class="mealsbox">
+		<div id="drinksheader" class="cuisinebox">
+			<img src='web/img/pl.png'/>
+			<img src='web/img/mx.png'/>
+			<img src='web/img/it.png'/>
+			You can select one from all our different types of bars
+		</div>
+		<div id="drinksbox" class="container">
+			<div class="column-1"></div>
+		    <div class="column-2"></div>
+		    <div class="column-3"></div>
+		</div>
+	</div>
+	
+</div>

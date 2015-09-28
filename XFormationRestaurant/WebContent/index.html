@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+		<title>X-Formation online order</title>
+		<link rel="stylesheet" href="web/css/main.css" type="text/css" media="all">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+		
+		<script type="text/javascript">
+			var placeorder = function () {
+				var answer = confirm("Your order is about to be placed");
+				if (answer == true) {
+					//Retrieve last order number from backoffice query
+				    alert('Your order number is ' + Math.floor((Math.random() * 100) + 1));
+				} else {
+				    return false;
+				}
+			};
+			
+			var addToTotalprice = function(price) {
+				var totalprice = $("#totalprice span").text();
+				$("#totalprice span").text(parseInt(totalprice) + parseInt(price));
+			};
+			
+			var restFromTotalprice = function(price) {
+				var totalprice = $("#totalprice span").text();
+				$("#totalprice span").text(parseInt(totalprice) - parseInt(price));
+			};	
+			
+			var checksChangesMaincourse = function() {
+				//If user wants to come back to this screen we clean maincourse and dessert selection
+				if($("#enquiryline .maincourse").length > 0) {
+					var answer = confirm("You have a previous selection, are you sure you want to change it?");
+					if (answer == true) {
+						var maincourseprice = $("#enquiryline .maincourse span").text();
+						restFromTotalprice(maincourseprice);
+						$(".maincourse").remove();
+						var dessertprice = $("#enquiryline .dessert span").text();
+						//He might have not chosen dessert yet
+						if(dessertprice) {
+							restFromTotalprice(dessertprice);
+							$(".dessert").remove();	
+						}
+					} else {
+						return false;
+					}
+				}
+			};
+			
+			var checkChangesDrink = function() {
+				//If user wants to come back to this screen we clean maincourse and dessert selection
+				if($("#enquiryline .drinkinline").length > 0) {
+					var answer = confirm("You have a previous selection, are you sure you want to change it?");
+					if (answer == true) {
+						$.each($("#enquiryline .drinkinline"), function(index, value) {
+							var drinkprice = $("#enquiryline #"+this.id+" span").text();
+							restFromTotalprice(drinkprice);
+							$("#enquiryline #"+this.id).remove();	
+					     });
+					} else {
+						return false;
+					}
+				}
+			};
+			
+			$(document).ready(function() {
+				$("#menumeals").click(function(event) {
+					//Is the user regreting a previous meal selection?
+					checksChangesMaincourse();		
+					$("#contents").load('meals.html');
+				});
+				$("#menudrinks").click(function(event) {
+					//Is the user regreting a previous drink selection?
+					checkChangesDrink();
+					$("#contents").load('drinks.html');
+				});
+				$("#placeorder").click(function(){
+					placeorder();
+				});
+			});
+		</script>
+		
+	</head>
+	
+	<body>
+		<div id="cont">
+			<div id="header">
+				<h2>X-Formation</h2>
+				<h1>Online menu enquiries</h1>
+			</div>
+			<div id="contents">
+				<h2><span>WELCOME TO OUR RESTAURANT</span></h2>
+				<p>You can choose among our cart of meals and drinks. We have 3 types of cuisine:</p>
+				<p>&nbsp;</p> <!-- I know this is tacky and it should by done by css -->
+				<p> · Polish</p>
+				<p> · Mexican</p>
+				<p> · Italian</p>
+				<p>&nbsp;</p>
+				<p>and every meal consist on a delicious main course plus dessert.</p>
+			</div>
+			<div id="menu">
+				<h2>Menus</h2>
+				<ul>
+					<li><a id="menumeals" href="#">Meals</a></li>
+			   		<li><a id="menudrinks" href="#">Drinks</a></li>
+				</ul>
+			</div>
+			<div id="footer">
+				<h1><span>Current enquiry</span></h1>			
+				<div id="enquiryline">
+					<div id="totalprice" class="totalprice">Total: <span>0</span>zl</div>
+					<div id="placeorder" class="placeorder">Place order</div>
+				</div>
+				<h2><a href="#">Visit our blog!</a></h2>
+			</div>
+		</div>
+	</body>
+	
+</html>
