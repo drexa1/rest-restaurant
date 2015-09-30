@@ -70,7 +70,7 @@ public class BackofficequeueDAO extends ConnectionDAO {
 		List<Order> result = new ArrayList<Order>();
 		try {
 			c = getConnection();						
-			String sql = "SELECT * FROM " + TABLE + " ORDER BY " + fieldToOrder + (!ascendent ? "DESC" : "");
+			String sql = "SELECT * FROM " + TABLE + " ORDER BY " + fieldToOrder + (!ascendent ? " DESC" : "");
 			stmt = c.prepareStatement(sql);
 			rs = stmt.executeQuery();
 			
@@ -102,8 +102,11 @@ public class BackofficequeueDAO extends ConnectionDAO {
 		Connection c = null;
 		PreparedStatement stmt = null;
 		try {
+			//SQLite locked to exclusive at this point, we request new connection just for this case
+			closeConnection();
 			c = getConnection();
-			String sql = "insert into" + TABLE + " values (?,?,?)";
+			
+			String sql = "INSERT INTO " + TABLE + " VALUES (?,?,?)";
 			stmt = c.prepareStatement(sql);
 			
 			Order order = (Order)obj;

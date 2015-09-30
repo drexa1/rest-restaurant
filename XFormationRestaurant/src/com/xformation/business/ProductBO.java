@@ -43,7 +43,8 @@ public class ProductBO {
 	public List findAllOrder() throws Exception {
 		return orderDAO.findAll();
 	}	
-	public boolean addOrder(String desc, float price) throws Exception {
+	public Integer addOrder(String desc, float price) throws Exception {
+		Integer result = new Integer(0);
 		Order bluemonday = new Order();
 		//Find the last order number
 		List orders = orderDAO.findAllOrderBy("oid", false);
@@ -55,7 +56,11 @@ public class ProductBO {
 		}
 		bluemonday.setDesc(desc);
 		bluemonday.setPrice(price);
-		return orderDAO.add(bluemonday);
+		//Return the last order number
+		if(orderDAO.add(bluemonday)) {
+			result = bluemonday.getOid();
+		}
+		return result;
 	}
 	
 	

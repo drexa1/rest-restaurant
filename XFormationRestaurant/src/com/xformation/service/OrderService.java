@@ -32,7 +32,8 @@ public class OrderService {
 	
 	@GET
 	@Path("/new/{desc}/{price}")
-	public boolean newOrder(@PathParam("desc") String desc, @PathParam("price") float price) throws Exception {
+    @Produces(MediaType.APPLICATION_JSON)
+	public Integer newOrder(@PathParam("desc") String desc, @PathParam("price") float price) throws Exception {
 		return business.addOrder(desc, price);
 	}
 

@@ -5,15 +5,14 @@
 		//Add a dessert to the current enquiry box and proceed to the next screen
 		var sendDessertToEnquiry = function (oid, name, cuisine, price) {
 		    selectedCuisine = cuisine;
-		    $('div#enquiryline').append("<div id='dessert"+oid+"' class='dessert'>"+name+"<span>"+price+"</span></div>").fadeIn(2500);
-		    $("#contents").load('drinks.html').fadeIn(2500);
+		    $('div#enquiryline').append("<div id='dessert"+oid+"' class='dessert'><span id='label'>"+name+"</span><span id='price'>"+price+"</span></div>").fadeIn(2500);
+		    $('#enquiryline #dessert'+oid).css('cursor','auto');
 		    addToTotalprice(price);
+		    $("#contents").load('web/welcome.html').fadeIn(2500);
 		};
 	
 		$(document).ready(function() {
-			
 			$(".mealsbox").append("<div id='"+selectedCuisine+"' class='cuisinebox'><img src='web/img/"+selectedCuisine.toLowerCase()+".png'/>"+selectedCuisine+" Desserts</div>");
-			
 			//Fill div with desserts
 			$.getJSON("http://localhost:8080/XFormationRestaurant/rest/desserts/cuisine/" + selectedCuisine)
 					 .done(function(data) {
@@ -27,12 +26,11 @@
 			  		 .fail(function(jqxhr, textStatus, error) {
 			    		//OUTLAW: some white lie to not worry customers
 			    		var whitelie = "Oops - kitchen is temporary closed, sorry!";
-			    		$('div#'+selectedCuisine+'.cuisinebox').append("<div id='whilelie'>"+whitelie+"</div>").fadeIn('slow');
+			    		$('div#'+selectedCuisine+'.cuisinebox').append("<div class='whilelie'>"+whitelie+"</div>").fadeIn('slow');
 			    	 	var err = textStatus + ", " + error;
 			    	 	console.log( "JSON Request Failed for DIV.mealsbox: " + err );
 			});
 			$('.mealsbox').fadeIn(2500);
-			
 		});
 		
 	</script>

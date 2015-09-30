@@ -22,7 +22,7 @@
 	.cuisinebox img { width: 40px; height: 40px; vertical-align: middle; }
 	.mealbox{ display: auto; }
 	
-	.maincourse, .dessert, .drinkinline {  display: inline; 		
+	.maincourse, .dessert, .drinkinline { display: inline; 		
 											 padding: 8px;
 											 margin-left: 15px;
 											 margin-top: 50px;
@@ -37,7 +37,7 @@
 							    			 -webkit-border-radius: 10px;
 							    			 -khtml-border-radius: 10px;
 	}
-	.drink {  display: block; 		
+	.drink { display: block; 		
 			 padding: 8px;
 			 margin-left: 15px;
 			 margin-top: 10px;
@@ -51,13 +51,31 @@
    			 -webkit-border-radius: 10px;
    			 -khtml-border-radius: 10px;
 	}
+	.drinkextra { display: block; 		
+					 padding: 8px;
+					 margin-left: 150px;
+					 margin-top: 10px;
+					 border: 1px solid #e93700;
+					 height: 20px;
+					 width: 120px;
+					 text-align: center;
+					 background-color: #e93700;
+					 color: white; 
+					 cursor: pointer;
+					 border-radius: 10px;
+					 -moz-border-radius: 10px;
+		   			 -webkit-border-radius: 10px;
+		   			 -khtml-border-radius: 10px;
+	}
+	.drinkinline img { height: 40px; width: 40px; vertical-align: top; }
+	
+	span#price, span#ice, span#lemon { display: none; }
 	
 	.container{ position: relative; width: 500px; }
 	.column-1{ width: 33%; left: 0; position: absolute; }
 	.column-2{ width: 34%; margin-left: 33%; position: absolute;	}
 	.column-3{ width: 33%; right: 0; position: absolute; }
 	
-	.maincourse span, .dessert span, .drinkinline span { display: none; }
 	.totalprice{ float: left; 
 				 font-size: 30px;
 				 font-weight: bold;			 
@@ -79,6 +97,6 @@
     			 -khtml-border-radius: 10px;
 	}
 			   					
-	#whitelie{ display: block; margin-top: 20px; }
+	.whitelie{ display: block; margin-top: 20px; color: #e93700; }
 	
 </style>

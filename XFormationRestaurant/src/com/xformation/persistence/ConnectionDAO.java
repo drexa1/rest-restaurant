@@ -33,6 +33,10 @@ public abstract class ConnectionDAO {
 	    }
 	    return c;
 	  }
+	public void closeConnection() throws Exception {
+		c.close();
+		c = null;
+	}
 
 	public abstract List findByColumn(String columnId, String value) throws Exception;
 	public abstract List findAll() throws Exception;

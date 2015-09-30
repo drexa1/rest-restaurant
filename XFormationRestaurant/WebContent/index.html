@@ -8,76 +8,146 @@
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 		
 		<script type="text/javascript">
+			/**
+			Sends an order to the server side with format OID, DESC, TOTALPRICE
+			*/
 			var placeorder = function () {
-				var answer = confirm("Your order is about to be placed");
-				if (answer == true) {
-					//Retrieve last order number from backoffice query
-				    alert('Your order number is ' + Math.floor((Math.random() * 100) + 1));
+				var totalprice = $("#totalprice span").text();
+				if(totalprice > 0) {
+					var answer = confirm("Do you want to place your order now?");
+					if (answer == true) {
+						var enquirydesc = prepareEnquiry();
+						alert(enquirydesc);
+						$.getJSON("http://localhost:8080/XFormationRestaurant/rest/orders/new/" + enquirydesc + "/" + totalprice)
+						 .done(function(data) {
+								//Retrieve last order number from backoffice query
+							    alert('Your order number is ' + data);
+								//Go back to the begining
+								cleanMeals();
+								cleanDrinks();
+							    $("#contents").load('web/welcome.html');
+				  		 })
+				  		 .fail(function(jqxhr, textStatus, error) {
+				    		alert("Sorry, we are experiencing some troubles. We will be back soon");
+				    	 	var err = textStatus + ", " + error;
+				    	 	console.log( "JSON Request Failed for DIV.mealsbox: " + err );
+						});
+					} else {
+					    return false;
+					}	
 				} else {
-				    return false;
+					alert("Choose something from our delicious cuisines or some of our drinks");
 				}
 			};
 			
+			/**
+			Prepares a description of all the items in the order
+			*/
+			var prepareEnquiry = function() {
+				var desc = '';
+				if($("#enquiryline .maincourse").length > 0) {
+					var maincourselabel = $("#enquiryline .maincourse span#label").text();
+					var maincourseprice = $("#enquiryline .maincourse span#price").text();
+					desc += maincourselabel + '(' + maincourseprice + ') / ';
+				}
+				
+				if($("#enquiryline .dessert").length > 0) {
+					var dessertlabel = $("#enquiryline .dessert span#label").text();
+					var dessertprice = $("#enquiryline .dessert span#price").text();
+					desc += dessertlabel + '(' + dessertprice + ') / ';
+				} 
+					
+				if($("#enquiryline .drinkinline").length > 0) {
+					var drinklabel = $("#enquiryline .drinkinline span#label").text();
+					var drinkprice = $("#enquiryline .drinkinline span#price").text();
+					var drinklemon = $("#enquiryline .drinkinline span#lemon").text();
+					var drinkice = $("#enquiryline .drinkinline span#ice").text();
+					desc += drinklabel + '(' + drinkprice + ')(' + drinklemon + ')(' + drinkice + ')'
+				}
+				return desc;
+			};
+			
+			/**
+			Update the total price
+			*/
 			var addToTotalprice = function(price) {
 				var totalprice = $("#totalprice span").text();
 				$("#totalprice span").text(parseInt(totalprice) + parseInt(price));
 			};
-			
 			var restFromTotalprice = function(price) {
 				var totalprice = $("#totalprice span").text();
 				$("#totalprice span").text(parseInt(totalprice) - parseInt(price));
 			};	
 			
-			var checksChangesMaincourse = function() {
+			/**
+			Checks if the user is tingling back and forth
+			*/
+			var checksChangesMeals = function() {
 				//If user wants to come back to this screen we clean maincourse and dessert selection
 				if($("#enquiryline .maincourse").length > 0) {
-					var answer = confirm("You have a previous selection, are you sure you want to change it?");
+					var answer = confirm("You have a previous selection, do you want to change it?");
 					if (answer == true) {
-						var maincourseprice = $("#enquiryline .maincourse span").text();
-						restFromTotalprice(maincourseprice);
-						$(".maincourse").remove();
-						var dessertprice = $("#enquiryline .dessert span").text();
-						//He might have not chosen dessert yet
-						if(dessertprice) {
-							restFromTotalprice(dessertprice);
-							$(".dessert").remove();	
-						}
+						cleanMeals();
 					} else {
 						return false;
 					}
 				}
 			};
-			
-			var checkChangesDrink = function() {
+			var checkChangesDrinks = function() {
 				//If user wants to come back to this screen we clean maincourse and dessert selection
 				if($("#enquiryline .drinkinline").length > 0) {
-					var answer = confirm("You have a previous selection, are you sure you want to change it?");
+					var answer = confirm("You have a previous selection, do you want to change it?");
 					if (answer == true) {
-						$.each($("#enquiryline .drinkinline"), function(index, value) {
-							var drinkprice = $("#enquiryline #"+this.id+" span").text();
-							restFromTotalprice(drinkprice);
-							$("#enquiryline #"+this.id).remove();	
-					     });
+						cleanDrinks();
 					} else {
 						return false;
 					}
 				}
 			};
 			
+			/**
+			Cleans meals or drinks in the enquiry line
+			*/
+			var cleanMeals = function() {
+				if($("#enquiryline .maincourse").length > 0) {
+					var maincourseprice = $("#enquiryline .maincourse span#price").text();
+					restFromTotalprice(maincourseprice);
+					$(".maincourse").remove();
+					var dessertprice = $("#enquiryline .dessert span#price").text();
+					//He might have not chosen dessert yet
+					if(dessertprice) {
+						restFromTotalprice(dessertprice);
+						$(".dessert").remove();	
+					}
+				}
+			};
+			var cleanDrinks = function() {
+				if($("#enquiryline .drinkinline").length > 0) {
+					var drinkprice = $("#enquiryline .drinkinline span#price").text();
+					restFromTotalprice(drinkprice);
+					$(".drinkinline").remove();
+				}
+			};
+			
+			/**
+			Register functions to buttons
+			*/
 			$(document).ready(function() {
 				$("#menumeals").click(function(event) {
 					//Is the user regreting a previous meal selection?
-					checksChangesMaincourse();		
-					$("#contents").load('meals.html');
+					checksChangesMeals();		
+					$("#contents").load('web/meals.html');
 				});
 				$("#menudrinks").click(function(event) {
 					//Is the user regreting a previous drink selection?
-					checkChangesDrink();
-					$("#contents").load('drinks.html');
+					checkChangesDrinks();
+					$("#contents").load('web/drinks.html');
 				});
 				$("#placeorder").click(function(){
 					placeorder();
 				});
+				$("#totalprice span").text(0);
+				$("#contents").load('web/welcome.html');
 			});
 		</script>
 		
@@ -90,14 +160,7 @@
 				<h1>Online menu enquiries</h1>
 			</div>
 			<div id="contents">
-				<h2><span>WELCOME TO OUR RESTAURANT</span></h2>
-				<p>You can choose among our cart of meals and drinks. We have 3 types of cuisine:</p>
-				<p>&nbsp;</p> <!-- I know this is tacky and it should by done by css -->
-				<p> · Polish</p>
-				<p> · Mexican</p>
-				<p> · Italian</p>
-				<p>&nbsp;</p>
-				<p>and every meal consist on a delicious main course plus dessert.</p>
+
 			</div>
 			<div id="menu">
 				<h2>Menus</h2>
