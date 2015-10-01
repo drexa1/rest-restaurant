@@ -1,0 +1,56 @@
+<div id="meals">
+	
+	<script type="text/javascript">
+		
+		//Stores the value of the selected type of cuisine for navigation
+		var selectedCuisine;
+		
+		//Add a maincourse to the current enquiry box and proceed to the next screen
+		var sendMaincourseToEnquiry = function (oid, name, cuisine, price) {
+		    selectedCuisine = cuisine;
+		    $('div#enquiryline').append("<div id='maincourse"+oid+"' class='maincourse'><span id='label'>"+name+"</span><span id='price'>"+price+"</span></div>").fadeIn(2500);
+		    $('#enquiryline #maincourse'+oid).css('cursor','auto');
+		    addToTotalprice(price);
+		    $("#contents").load('web/desserts.html').fadeIn(2500);
+		};
+		
+		$(document).ready(function() {
+			
+			//Easily changeable for a dynamic call to the server if more types of cuisine are added
+			// var arr > service method() > dao method() > SELECT DISTINCT TYPE FROM MEALS
+			var arr = [ "PL", "MX", "IT" ];
+			
+			//Draw divs
+			jQuery.each(arr, function(index, value) {
+				$(".mealsbox").append("<div id='"+value+"' class='cuisinebox'><img src='web/img/"+value.toLowerCase()+".png'/>"+value+" Courses</div>").hide();
+		    });
+			
+			//Fill divs with maincourses
+			$('.mealsbox').children('div').each(function () {
+				var currentDiv = this.id;
+				$.getJSON("http://localhost:8080/XFormationRestaurant/rest/maincourses/cuisine/" + this.id)
+						 .done(function(data) {
+								 $.each(data, function(index, value) {
+									 $('div#'+currentDiv+'.cuisinebox').append("<div id='maincourse"+data[index].oid+"' class='maincourse'>"+data[index].name+"-"+data[index].price+"zl</div>").fadeIn('slow');
+									 $('div#maincourse'+data[index].oid).click(function () {
+										 sendMaincourseToEnquiry(data[index].oid, data[index].name, currentDiv, data[index].price);
+									 });
+							     });
+				  		 })
+				  		 .fail(function(jqxhr, textStatus, error) {
+				    		//OUTLAW: some white lie to not worry customers
+				    		var whitelie = "Oops - kitchen is temporary closed, sorry!";
+				    		$('div#'+currentDiv+'.cuisinebox').append("<div class='whilelie'>"+whitelie+"</div>").fadeIn('slow');
+				    	 	var err = textStatus + ", " + error;
+				    	 	console.log( "JSON Request Failed for DIV.mealsbox: " + err );
+				});
+				$('.mealsbox').fadeIn(2500);
+			});
+
+		});
+	</script>
+
+	<h2><span>SELECT ONE OF OUR MAIN COURSES</span></h2>
+    <div class="mealsbox"></div>
+
+</div>

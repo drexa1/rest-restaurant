@@ -1,0 +1,70 @@
+
+# Relation of exposed service operations:
+
+##################################################################
+# MAINCOURSES
+##################################################################
+
+#GET THE NAME OF A CERTAIN MAINCOURSE (p.e: 7)
+http://localhost:8080/XFormationRestaurant/rest/maincourses/name/7
+
+#GET THE PRICE OF A CERTAIN MAINCOURSE (p.e: 7)
+http://localhost:8080/XFormationRestaurant/rest/maincourses/price/7
+
+#GET ALL MAINCOURSES
+http://localhost:8080/XFormationRestaurant/rest/maincourses
+
+#GET ALL MAINCOURSES OF A CERTAIN CUISINE TYPE (p.e: PL)
+http://localhost:8080/XFormationRestaurant/rest/maincourses/cuisine/PL
+
+#GET A MAINCOURSE BY OID (p.e: 7)
+http://localhost:8080/XFormationRestaurant/rest/maincourses/7
+
+##################################################################
+# DESSERTS
+##################################################################
+
+#GET THE NAME OF A CERTAIN DESSERT (p.e: 2)
+http://localhost:8080/XFormationRestaurant/rest/desserts/name/2
+
+#GET THE PRICE OF A CERTAIN DESSERT (p.e: 2)
+http://localhost:8080/XFormationRestaurant/rest/desserts/price/2
+
+#GET ALL DESSERTS
+http://localhost:8080/XFormationRestaurant/rest/desserts
+
+#GET ALL DESSERTS OF A CERTAIN CUISINE TYPE (p.e: PL)
+http://localhost:8080/XFormationRestaurant/rest/desserts/cuisine/PL
+
+#GET A DESSERT BY OID (p.e: 2)
+http://localhost:8080/XFormationRestaurant/rest/desserts/2
+
+##################################################################
+# DRINKS
+##################################################################
+
+#GET THE NAME OF A CERTAIN DRINK (p.e: 4)
+http://localhost:8080/XFormationRestaurant/rest/drinks/name/4
+
+#GET THE PRICE OF A CERTAIN DRINKS (p.e: 4)
+http://localhost:8080/XFormationRestaurant/rest/drinks/price/4
+
+#GET ALL DRINKS
+http://localhost:8080/XFormationRestaurant/rest/drinks
+
+#GET A DRINK BY OID (p.e: 4)
+http://localhost:8080/XFormationRestaurant/rest/drinks/4
+
+##################################################################
+# ORDERS
+##################################################################
+
+#CREATE A NEW ENQUIRY (with some description and its price)
+http://localhost:8080/XFormationRestaurant/rest/orders/new/heresomedescription/45
+
+#GET ALL ENQUIRIES
+http://localhost:8080/XFormationRestaurant/rest/orders
+
+#GET AN ENQUIRY BY OID (p.e: 1)
+http://localhost:8080/XFormationRestaurant/rest/orders/1
+

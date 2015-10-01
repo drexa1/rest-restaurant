@@ -1,0 +1,35 @@
+<div id="drinkextras">
+
+	<script type="text/javascript">
+	
+		//Add lemon or ice icons
+		$(document).ready(function() {
+			$("#drinklemon").click(function(){
+				$('#enquiryline .drinkinline').append("<span id='lemon'>L</span><img src='web/img/lemon.png'/>");
+				$("#drinklemon").fadeTo('fast', 0.5);
+				$('#drinklemon').css('cursor','auto');
+				$('#drinklemon').unbind("click");
+			});
+			$("#drinkice").click(function(){
+				$('#enquiryline .drinkinline').append("<span id='ice'>I</span><img src='web/img/ice.png'/>");
+				$("#drinkice").fadeTo('fast', 0.5);
+				$('#drinkice').css('cursor','auto');
+				$('#drinkice').unbind("click");
+			});
+			$("#drinknothing").click(function(){
+				$("#contents").load('web/welcome.html').fadeIn(2500);
+			});
+		});
+	
+	</script>
+
+	<h2><span>Do you want lemon or ice for the drink?</span></h2>
+	<div class="mealsbox">
+		<div id="drinkextrasbox" class="container">
+			<div id='drinklemon' class='drinkextra'>Lemon</div>
+			<div id='drinkice' class='drinkextra'>Some ice</div>
+			<div id='drinknothing' class='drinkextra'>Done, thanks!</div>
+		</div>
+	</div>
+
+</div>

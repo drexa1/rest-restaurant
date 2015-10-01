@@ -17,10 +17,9 @@
 					var answer = confirm("Do you want to place your order now?");
 					if (answer == true) {
 						var enquirydesc = prepareEnquiry();
-						alert(enquirydesc);
+						//Retrieve last order number from backoffice query
 						$.getJSON("http://localhost:8080/XFormationRestaurant/rest/orders/new/" + enquirydesc + "/" + totalprice)
 						 .done(function(data) {
-								//Retrieve last order number from backoffice query
 							    alert('Your order number is ' + data);
 								//Go back to the begining
 								cleanMeals();
@@ -48,13 +47,13 @@
 				if($("#enquiryline .maincourse").length > 0) {
 					var maincourselabel = $("#enquiryline .maincourse span#label").text();
 					var maincourseprice = $("#enquiryline .maincourse span#price").text();
-					desc += maincourselabel + '(' + maincourseprice + ') / ';
+					desc += maincourselabel + '(' + maincourseprice + ')-';
 				}
 				
 				if($("#enquiryline .dessert").length > 0) {
 					var dessertlabel = $("#enquiryline .dessert span#label").text();
 					var dessertprice = $("#enquiryline .dessert span#price").text();
-					desc += dessertlabel + '(' + dessertprice + ') / ';
+					desc += dessertlabel + '(' + dessertprice + ')-';
 				} 
 					
 				if($("#enquiryline .drinkinline").length > 0) {
